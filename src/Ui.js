@@ -1,18 +1,9 @@
 import { getProducts } from "./Product";
 import { addProductToCart } from "./Cart";
 
-// const images = require.context("./assets/images", false, /\.(png|jpe?g|gif)$/);
-// const imageMap = {};
-
-// images.keys().forEach((key) => {
-//   const imageName = key.replace("./", ""); // Usuwa './' z klucza
-//   imageMap[imageName] = images(key).default; // Ustawiamy ścieżkę do obrazu
-// });
-
-// console.log(imageMap);
-
 const productContainer = document.querySelector(".products-container");
 const addBtn = document.querySelector(".add-button");
+// const imageMap = {};
 
 export default function loadPage() {
   document.addEventListener("DOMContentLoaded", initalizeApp);
@@ -48,4 +39,22 @@ function initAddBtn() {
   });
 }
 
+// function getProductsImages() {
+//   const images = require.context(
+//     "./assets/images",
+//     false,
+//     /\.(png|jpe?g|gif)$/
+//   );
+
+//   images.keys().forEach((key) => {
+//     const imageName = key.replace("./", ""); // Usuwa './' z klucza
+//     imageMap[imageName] = images(key).default; // Ustawiamy ścieżkę do obrazu
+//   });
+
+//   return imageMap;
+// }
+
+// function getProductImage() {}
+
+// console.log(getProductsImages());
 function displayProduct(product) {}
