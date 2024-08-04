@@ -1,4 +1,7 @@
 import productData from "./data.json";
+import decrementIcon from "./assets/images/icon-decrement-quantity.svg";
+import incrementIcon from "./assets/images/icon-increment-quantity.svg";
+import addToCartIcon from "./assets/images/icon-add-to-cart.svg";
 
 const productContainer = document.querySelector(".products-container");
 
@@ -25,17 +28,22 @@ function renderProduct(product, productId) {
   const productTemplate = `
     <div class="product-item">
         <div class="product-container-img">
-            <img class="product-img" src="${require("./assets/images/image-cake-desktop.jpg")}" alt="img">
+            <img class="product-img" 
+              srcset="${product.image.mobile}, 
+                      ${product.image.tablet},
+                      ${product.image.desktop}"
+              sizes="(max-width: 375px) 480px, (max-width: 800px) 470px, 1440px"
+              src="${product.image.desktop}" alt="product-img"
+            >
             <button class="add-button" data-action="add-product">
-                    <img src="../assets/images/icon-add-to-cart.svg" alt="addImg">
+                    <img src="${addToCartIcon}" alt="addImg">
                     Add to Cart
                 </button>
                 <button class="view-count" product-id="${productId}">
-                    <img src="./assets/images/icon-decrement-quantity.svg" data-action="decrement-product" alt="decrement(-)" data-increment="">
+                    <img src="${decrementIcon}" data-action="decrement-product" alt="decrement(-)" data-increment="">
                     <p class="product-counter" data-item-count="${1}">1</p>
-                    <img src="./assets/images/icon-increment-quantity.svg" data-action="increment-product" alt="increment(+)">
+                    <img src="${incrementIcon}" data-action="increment-product" alt="increment(+)">
                 </button>
-                
             </div>
             <div class="product-description">
                 <p class="product-category">${product.category}</p>
