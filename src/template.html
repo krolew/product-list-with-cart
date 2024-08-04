@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="<%=require('./assets/images/favicon-32x32.png')%>"
+    />
+
+    <title>Frontend Mentor | Product list with cart</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-container">
+        <header>
+          <h2>Desserts</h2>
+        </header>
+        <div class="products-container"></div>
+      </div>
+      <div class="right-container">
+        <div class="cart-container">
+          <h3>Your Cart (<span id="cartItems">0</span>)</h3>
+          <div class="cart-items-container">
+            <div class="empty-cart">
+              <img
+                src="<%= require('./assets/images/illustration-empty-cart.svg') %>"
+                alt="Empty Cart"
+              />
+              <p>Your added items will appear here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
