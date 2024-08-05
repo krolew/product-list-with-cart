@@ -1,9 +1,9 @@
 import { getProducts } from "./Product";
 import { addProductToCart } from "./Cart";
+import { renderEmptyCartContainer } from "./Cart";
 
 const productContainer = document.querySelector(".products-container");
 const addBtn = document.querySelector(".add-button");
-// const imageMap = {};
 
 export default function loadPage() {
   document.addEventListener("DOMContentLoaded", initalizeApp);
@@ -11,6 +11,7 @@ export default function loadPage() {
 
 function initalizeApp() {
   try {
+    renderEmptyCartContainer();
     getProducts();
     initBtns();
   } catch (err) {
@@ -38,23 +39,3 @@ function initAddBtn() {
     }
   });
 }
-
-// function getProductsImages() {
-//   const images = require.context(
-//     "./assets/images",
-//     false,
-//     /\.(png|jpe?g|gif)$/
-//   );
-
-//   images.keys().forEach((key) => {
-//     const imageName = key.replace("./", ""); // Usuwa './' z klucza
-//     imageMap[imageName] = images(key).default; // Ustawiamy ścieżkę do obrazu
-//   });
-
-//   return imageMap;
-// }
-
-// function getProductImage() {}
-
-// console.log(getProductsImages());
-function displayProduct(product) {}
