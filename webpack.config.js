@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
 
 module.exports = {
@@ -25,6 +26,9 @@ module.exports = {
       title: "",
       template: "./src/template.html",
     }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: "src/assets/images", to: "assets/images" }],
+    }),
   ],
   module: {
     rules: [
@@ -39,6 +43,7 @@ module.exports = {
           options: {
             name: "[path][name].[ext]",
             context: path.resolve(__dirname, "src"),
+            esModule: false,
           },
         },
       },
