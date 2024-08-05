@@ -80,9 +80,6 @@ header {
   border-radius: 10px;
 }
 
-/* .product-item-button-active {
-} */
-
 .product-item .product-container-img .product-img {
   width: 100%;
 }
@@ -181,4 +178,34 @@ header {
 .cart-items-container .empty-cart p {
   color: var(--Rose400);
   text-align: center;
+}
+
+.cart-item-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--Rose400);
+  padding: 1.125rem 0;
+}
+
+.cart-item-price-container {
+  display: flex;
+  justify-content: space-between;
+  width: 9.875rem;
+}
+
+.cart-item-name {
+  color: var(--Rose900);
+  margin-bottom: 0.6rem;
+}
+.cart-item-amount {
+  color: var(--Red);
+}
+
+.cart-item-price-per-unit {
+  color: var(--Rose300);
+}
+
+.cart-item-price-total {
+  color: var(--Rose400);
 }
