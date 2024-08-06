@@ -1,5 +1,6 @@
 import iconCartEmpty from "./assets/images/illustration-empty-cart.svg";
 import iconRemoveOrder from "./assets/images/icon-remove-item.svg";
+import iconCarbonNeutral from "./assets/images/icon-carbon-neutral.svg";
 import {
   Product,
   updateProductButtonsStyle,
@@ -22,11 +23,17 @@ export class Cart {
     return this.list;
   }
 
+  getCartListTotalAmountProducts() {
+    const totalAmountProducts = this.list.reduce((sum, product) => {
+      return (sum += product.amount);
+    }, 0);
+    return totalAmountProducts;
+  }
+
   getTotalPriceCartList() {
     const totalPrice = this.list.reduce((sum, product) => {
-      sum += product.price;
+      return (sum += product.price * product.amount);
     }, 0);
-
     return totalPrice;
   }
 
@@ -39,16 +46,21 @@ export class Cart {
     this.list.push(product);
   }
 
-  removeProduct(product) {
-    this.list = this.list.filter(
-      (productCart) => productCart.name !== product.name
-    );
+  removeProduct(productName) {
+    this.list = this.list.filter((product) => product.name !== productName);
   }
 
-  decreseProductAmount(productName) {
+  decreaseProductListAmount(productName) {
+    // If amount of product is 1 we will remove this product instead of decrease amount
+    // console.log(this.getProduct(productName).amount);
+    if (this.getProduct(productName).amount === 1) {
+      this.removeProduct(productName);
+      return;
+    }
+
     if (this.getProduct(productName)) {
       this.getCartList().forEach((product) => {
-        if (product.name == productName) {
+        if (product.name === productName) {
           product.decreaseAmount();
           return;
         }
@@ -56,7 +68,7 @@ export class Cart {
     }
   }
 
-  increaseProductAmount(productName) {
+  increaseProductListAmount(productName) {
     if (this.getProduct(productName)) {
       this.getCartList().forEach((product) => {
         if (product.name == productName) {
@@ -81,11 +93,34 @@ export function addProductToCart(event) {
   let productPrice = addBtnProduct.dataset.productPrice;
   const product = new Product(productName, productPrice);
 
+  // This will work only if addProductToCart is first time invoke for first product
+  if (Storage.isCartEmpty()) {
+    removeEmptyCart();
+    renderCartSummary();
+  }
+
   Storage.addProduct(product);
 
   updateProductButtonsStyle(addBtnProduct, btnViewCount);
   updateProductImgStyle(productImg);
   updateCartContainer(product);
+  updateAmountCartItemsHeader();
+  updateCartTotalPrice();
+}
+
+function removeEmptyCart() {
+  document.querySelector(".empty-cart").remove();
+}
+
+function updateCartTotalPrice() {
+  document.querySelector(
+    "#cart-price-total"
+  ).innerHTML = `\$${Storage.getTotalPriceCart().toFixed(2)}`;
+}
+
+function updateAmountCartItemsHeader() {
+  const cartItemsAmountElement = document.querySelector("#cartItems");
+  cartItemsAmountElement.innerHTML = Storage.getTotalAmountProducts();
 }
 
 function updateCartContainer(product) {
@@ -98,8 +133,12 @@ function updateCartContainer(product) {
               <p class="cart-item-name">${product.name}</p>
               <div class="cart-item-price-container">
                 <p class="cart-item-amount">1x</p>
-                <p class="cart-item-price-per-unit">@\$${product.price}</p>
-                <p class="cart-item-price-total" >\$${product.price}</p>
+                <p class="cart-item-price-per-unit">@ \$${parseFloat(
+                  product.price
+                ).toFixed(2)}</p>
+                <p class="cart-item-price-total" >\$${parseFloat(
+                  product.price
+                ).toFixed(2)}</p>
               </div>
           </div>
       </div>
@@ -135,6 +174,31 @@ export function renderEmptyCartContainer() {
   const cartProductElement = document
     .createRange()
     .createContextualFragment(cartEmptyTemplate);
+
+  // Append empty Cart Template
+  cartContainer.appendChild(cartProductElement);
+}
+
+function renderCartSummary() {
+  const cartSummaryTemplate = `
+    <div class="cart-summary-container">
+      <div class="cart-order-info">
+          <p class="cart-order-text">Order Total</p>
+          <p id="cart-price-total" class="cart-price-total">\$${Storage.getTotalPriceCart().toFixed(
+            2
+          )}</p>
+      </div>
+      <div class="cart-carbon-container">
+        <img class="cart-carbon-img" src="${iconCarbonNeutral}">
+        <p>This is a <label class="carbon-neutral">carbon-neutral</label> delivery</p>    
+      </div>
+      <button class="btn-confirm-order">Confirm Order</button>
+    </div>
+  `;
+
+  const cartProductElement = document
+    .createRange()
+    .createContextualFragment(cartSummaryTemplate);
 
   // Append empty Cart Template
   cartContainer.appendChild(cartProductElement);
