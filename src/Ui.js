@@ -1,4 +1,8 @@
-import { getProducts } from "./Product";
+import {
+  getProducts,
+  handleProductIncrementButton,
+  handleProductDecremenButton,
+} from "./Product";
 import { addProductToCart } from "./Cart";
 import { renderEmptyCartContainer } from "./Cart";
 
@@ -28,13 +32,13 @@ function initAddBtn() {
   productContainer.addEventListener("click", function (event) {
     const action = event.target.dataset.action;
 
-    if (event.target.tagName === "BUTTON") {
+    if (event.target.tagName === "BUTTON" && event.target.id === "add-btn") {
       addProductToCart(event.target);
     } else if (event.target.tagName === "IMG") {
       if (action === "increment-product") {
-        console.log(event.target);
+        handleProductIncrementButton(event.target);
       } else if (action === "decrement-product") {
-        console.log(event.target);
+        handleProductDecremenButton(event.target);
       }
     }
   });
