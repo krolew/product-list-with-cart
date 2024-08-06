@@ -2,11 +2,13 @@ import productData from "./data.json";
 import decrementIcon from "./assets/images/icon-decrement-quantity.svg";
 import incrementIcon from "./assets/images/icon-increment-quantity.svg";
 import addToCartIcon from "./assets/images/icon-add-to-cart.svg";
+import Storage from "./Storage";
+import { renderEmptyCartContainer } from "./Cart";
 
 export class Product {
   constructor(name, price) {
     this.name = name;
-    this.price = parseFloat(price).toFixed(2);
+    this.price = price;
     this.amount = 1;
   }
 
@@ -28,8 +30,8 @@ export function getProducts() {
 }
 
 function renderProducts(prodcuts) {
-  prodcuts.forEach((product, productId) => {
-    renderProduct(product, productId);
+  prodcuts.forEach((product) => {
+    renderProduct(product);
   });
 }
 
@@ -39,10 +41,38 @@ export function updateProductButtonsStyle(addBtnProduct, btnViewCount) {
 }
 
 export function updateProductImgStyle(imgContainer) {
-  imgContainer.classList.add("active-product-img");
+  if (imgContainer.classList.contains("active-product-img")) {
+    imgContainer.classList.remove("active-product-img");
+  } else {
+    imgContainer.classList.add("active-product-img");
+  }
 }
 
-function renderProduct(product, productId) {
+function updateAmountDom(amountNumber) {}
+
+export function handleProductIncrementButton(event) {
+  const productName = event.parentNode.dataset.productName;
+  Storage.increaseProductAmount(productName);
+}
+
+export function handleProductDecremenButton(event) {
+  const viewCountBtn = event.parentNode;
+  const productName = viewCountBtn.dataset.productName;
+  const imgContainer =
+    viewCountBtn.previousElementSibling.previousElementSibling;
+
+  console.log(imgContainer.classList);
+  console.log(imgContainer);
+
+  Storage.decreaseProductAmount(productName);
+
+  if (Storage.isCartEmpty()) {
+    renderEmptyCartContainer();
+    updateProductImgStyle(imgContainer);
+  }
+}
+
+function renderProduct(product) {
   const productTemplate = `
     <div class="product-item">
         <div class="product-container-img">
@@ -53,16 +83,16 @@ function renderProduct(product, productId) {
               sizes="(max-width: 375px) 654px, (max-width: 800px) 427px, 502px"
               src="${product.image.desktop}" alt="product-img"
             >
-            <button class="add-button" data-action="add-product" data-product-name="${
+            <button id="add-btn" class="add-button" data-action="add-product" data-product-name="${
               product.name
             }" data-product-price="${product.price}">
                     <img src="${addToCartIcon}" alt="addImg">
                     Add to Cart
                 </button>
                 
-                <button class="view-count" product-name="${
+                <button class="view-count" data-product-name="${
                   product.name
-                }" product-price="${parseFloat(product.price).toFixed(2)}">
+                }" data-product-price="${parseFloat(product.price).toFixed(2)}">
                     <img src="${decrementIcon}" data-action="decrement-product" alt="decrement(-)" data-increment="">
                     <p class="product-counter" data-item-count="${1}">1</p>
                     <img src="${incrementIcon}" data-action="increment-product" alt="increment(+)">
