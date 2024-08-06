@@ -9,9 +9,15 @@ class Storage {
     let cartList = Object.assign(new Cart(), parsedData);
 
     cartList.setCart(
-      cartList
-        .getCartList()
-        .map((product) => Object.assign(new Product(), product))
+      cartList.getCartList().map((product) => {
+        // Assign Object from Storage list to be the class of product
+        let productInstance = Object.assign(new Product(), product);
+
+        // Set object price to be Float
+        productInstance.price = parseFloat(productInstance.price);
+
+        return productInstance;
+      })
     );
 
     return cartList;
@@ -35,6 +41,29 @@ class Storage {
   deleteProduct(product) {
     let cartList = this.getCartList();
     cartList.removeProduct(product);
+    this.saveCartList(cartList);
+  }
+
+  getTotalPriceCart() {
+    let cartList = this.getCartList();
+    let totalPrice = cartList.getTotalPriceCartList();
+    return totalPrice;
+  }
+
+  getTotalAmountProducts() {
+    let cartList = this.getCartList();
+    return cartList.getCartListTotalAmountProducts();
+  }
+
+  decreaseProductAmount(productName) {
+    let cartList = this.getCartList();
+    cartList.decreaseProductListAmount(productName);
+    this.saveCartList(cartList);
+  }
+
+  increaseProductAmount(productName) {
+    let cartList = this.getCartList();
+    cartList.increaseProductListAmount(productName);
     this.saveCartList(cartList);
   }
 }
