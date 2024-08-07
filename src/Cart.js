@@ -97,6 +97,7 @@ export function addProductToCart(event) {
   if (Storage.isCartEmpty()) {
     removeEmptyCart();
     renderCartSummary();
+    handleDeleteProductBtn();
   }
 
   Storage.addProduct(product);
@@ -112,26 +113,73 @@ function removeEmptyCart() {
   document.querySelector(".empty-cart").remove();
 }
 
-function updateCartTotalPrice() {
+export function removeCartProduct(productName) {
+  const cartItemsContainer = document.querySelector(
+    ".cart-items-container"
+  ).children;
+
+  for (let productContainer of cartItemsContainer) {
+    if (productContainer.dataset.productName === productName) {
+      productContainer.remove();
+      return;
+    }
+  }
+}
+
+export function updateCartProductItemPrice(productName) {
+  let cartItemPriceContainer = document.querySelectorAll(
+    ".cart-item-price-container[data-product-name]"
+  );
+  for (let cartItemPriceDiv of cartItemPriceContainer) {
+    if (cartItemPriceDiv.dataset.productName === productName) {
+      let cartItemAmount = cartItemPriceDiv.children[0];
+      let cartItemPriceTotal = cartItemPriceDiv.children[2];
+
+      cartItemAmount.innerHTML = `x${Storage.getProductAmount(productName)}`;
+      cartItemPriceTotal.innerHTML = `\$${Storage.getProductTotalPrice(
+        productName
+      )}`;
+
+      return;
+    }
+  }
+}
+
+export function updateCartTotalPrice() {
   document.querySelector(
     "#cart-price-total"
   ).innerHTML = `\$${Storage.getTotalPriceCart().toFixed(2)}`;
 }
 
-function updateAmountCartItemsHeader() {
+export function updateAmountCartItemsHeader() {
   const cartItemsAmountElement = document.querySelector("#cartItems");
   cartItemsAmountElement.innerHTML = Storage.getTotalAmountProducts();
+}
+
+export function handleDeleteProductBtn() {
+  const productItemsCartContainer = document.querySelector(
+    ".cart-items-container"
+  );
+
+  productItemsCartContainer.addEventListener("click", function (event) {
+    if (event.target.tagName === "IMG" && event.target.id === "deleteProduct") {
+      let productName = event.target.dataset.productName;
+      removeCartProduct(productName);
+    }
+  });
 }
 
 function updateCartContainer(product) {
   const cartItemsContainer = document.querySelector(".cart-items-container");
 
   const cartItemTemplate = `
-  <div class="cart-item-container">
+  <div class="cart-item-container" data-product-name="${product.name}">
       <div class="cart-item-container-description">
           <div class="cart-item-description">
               <p class="cart-item-name">${product.name}</p>
-              <div class="cart-item-price-container">
+              <div class="cart-item-price-container" data-product-name="${
+                product.name
+              }">
                 <p class="cart-item-amount">1x</p>
                 <p class="cart-item-price-per-unit">@ \$${parseFloat(
                   product.price
@@ -143,7 +191,9 @@ function updateCartContainer(product) {
           </div>
       </div>
       <div class="cart-item-cancel-img">
-        <img src="${iconRemoveOrder}" alt="cancel">
+        <img id="deleteProduct" src="${iconRemoveOrder}" 
+                  data-product-name="${product.name}" alt="deleteProduct"
+        >
       </div>
   `;
 
