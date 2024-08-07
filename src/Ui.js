@@ -3,7 +3,7 @@ import {
   handleProductIncrementButton,
   handleProductDecremenButton,
 } from "./Product";
-import { addProductToCart } from "./Cart";
+import { addProductToCart, initDeleteProductBtn } from "./Cart";
 import { renderEmptyCartContainer } from "./Cart";
 
 const productContainer = document.querySelector(".products-container");
