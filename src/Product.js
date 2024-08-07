@@ -3,7 +3,13 @@ import decrementIcon from "./assets/images/icon-decrement-quantity.svg";
 import incrementIcon from "./assets/images/icon-increment-quantity.svg";
 import addToCartIcon from "./assets/images/icon-add-to-cart.svg";
 import Storage from "./Storage";
-import { renderEmptyCartContainer } from "./Cart";
+import {
+  renderEmptyCartContainer,
+  removeCartProduct,
+  updateCartTotalPrice,
+  updateAmountCartItemsHeader,
+  updateCartProductItemPrice,
+} from "./Cart";
 
 export class Product {
   constructor(name, price) {
@@ -13,13 +19,17 @@ export class Product {
   }
 
   decreaseAmount() {
-    if (this.amount > 0) {
+    if (this.amount > 0 && this.amount < 100) {
       this.amount--;
     }
   }
 
   increaseAmount() {
-    this.amount++;
+    if (this.amount < 99) this.amount++;
+  }
+
+  get totalPrice() {
+    return parseFloat(this.price * this.amount).toFixed(2);
   }
 }
 
@@ -40,6 +50,13 @@ export function updateProductButtonsStyle(addBtnProduct, btnViewCount) {
   btnViewCount.style.display = "flex";
 }
 
+function updatePorductButtonsStyleDefault(addBtnProduct, btnViewCount) {
+  if (btnViewCount.style.display === "flex") {
+    btnViewCount.style.display = "none";
+    addBtnProduct.style.display = "block";
+  }
+}
+
 export function updateProductImgStyle(imgContainer) {
   if (imgContainer.classList.contains("active-product-img")) {
     imgContainer.classList.remove("active-product-img");
@@ -48,27 +65,55 @@ export function updateProductImgStyle(imgContainer) {
   }
 }
 
-function updateAmountDom(amountNumber) {}
+function updateProductCountText(productCountText, productName) {
+  productCountText.innerHTML = Storage.getProductAmount(productName);
+}
 
 export function handleProductIncrementButton(event) {
-  const productName = event.parentNode.dataset.productName;
+  const btnViewCount = event.parentNode;
+  const addBtnProduct = btnViewCount.previousElementSibling;
+  const productName = btnViewCount.dataset.productName;
+  const imgContainer =
+    btnViewCount.previousElementSibling.previousElementSibling;
+  const productCountText = btnViewCount.children[1];
+
   Storage.increaseProductAmount(productName);
+
+  updateProductCountText(productCountText, productName);
+  updateAmountCartItemsHeader();
+  updateCartProductItemPrice(productName);
+  updateCartTotalPrice();
 }
 
 export function handleProductDecremenButton(event) {
-  const viewCountBtn = event.parentNode;
-  const productName = viewCountBtn.dataset.productName;
+  const btnViewCount = event.parentNode;
+  const addBtnProduct = btnViewCount.previousElementSibling;
+  const productName = btnViewCount.dataset.productName;
   const imgContainer =
-    viewCountBtn.previousElementSibling.previousElementSibling;
-
-  console.log(imgContainer.classList);
-  console.log(imgContainer);
+    btnViewCount.previousElementSibling.previousElementSibling;
+  const productCountText = btnViewCount.children[1];
 
   Storage.decreaseProductAmount(productName);
 
+  // After decrease Product Amount first we check if there are any elements in the cart
   if (Storage.isCartEmpty()) {
     renderEmptyCartContainer();
     updateProductImgStyle(imgContainer);
+    updatePorductButtonsStyleDefault(addBtnProduct, btnViewCount);
+
+    // After decrease Product Amount we check if our item is deleted
+  } else if (Storage.getProduct(productName) === undefined) {
+    updateProductImgStyle(imgContainer);
+    updatePorductButtonsStyleDefault(addBtnProduct, btnViewCount);
+    removeCartProduct(productName);
+    updateCartTotalPrice();
+    updateAmountCartItemsHeader();
+  } else {
+    // If product is not deleted, amount decrease, and prices changed;
+    updateProductCountText(productCountText, productName);
+    updateAmountCartItemsHeader();
+    updateCartProductItemPrice(productName);
+    updateCartTotalPrice();
   }
 }
 
