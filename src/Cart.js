@@ -7,7 +7,7 @@ export function addProductToCart(event) {
 
   let addBtnProduct = event;
   let imgContainer = event.previousElementSibling;
-
+  console.log("XD");
   updateProductButtonsStyle(addBtnProduct, btnViewCount);
   updateProductImgStyle(imgContainer);
   updateCartContainer();
