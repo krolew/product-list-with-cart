@@ -5,6 +5,7 @@ import {
   Product,
   updateProductButtonsStyle,
   updateProductImgStyle,
+  updateDomElements,
 } from "./Product";
 import Storage from "./Storage";
 
@@ -52,7 +53,6 @@ export class Cart {
 
   decreaseProductListAmount(productName) {
     // If amount of product is 1 we will remove this product instead of decrease amount
-    // console.log(this.getProduct(productName).amount);
     if (this.getProduct(productName).amount === 1) {
       this.removeProduct(productName);
       return;
@@ -164,7 +164,8 @@ export function handleDeleteProductBtn() {
   productItemsCartContainer.addEventListener("click", function (event) {
     if (event.target.tagName === "IMG" && event.target.id === "deleteProduct") {
       let productName = event.target.dataset.productName;
-      removeCartProduct(productName);
+      Storage.deleteProduct(productName);
+      updateDomElements(productName);
     }
   });
 }
