@@ -44,6 +44,21 @@ class Storage {
     this.saveCartList(cartList);
   }
 
+  getProduct(productName) {
+    let cartList = this.getCartList();
+    return cartList.getProduct(productName);
+  }
+
+  getProductTotalPrice(productName) {
+    let cartList = this.getCartList();
+    return cartList.getProduct(productName).totalPrice;
+  }
+
+  getProductAmount(productName) {
+    let cartList = this.getCartList();
+    return cartList.getProduct(productName).amount;
+  }
+
   getTotalPriceCart() {
     let cartList = this.getCartList();
     let totalPrice = cartList.getTotalPriceCartList();
