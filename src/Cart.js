@@ -88,7 +88,6 @@ export function addProductToCart(event) {
   );
 
   let addBtnProduct = event;
-<<<<<<< HEAD
   let productImg = addBtnProduct.previousElementSibling;
   let productName = addBtnProduct.dataset.productName;
   let productPrice = addBtnProduct.dataset.productPrice;
@@ -103,10 +102,6 @@ export function addProductToCart(event) {
 
   Storage.addProduct(product);
 
-=======
-  let imgContainer = event.previousElementSibling;
-  console.log("XD");
->>>>>>> refs/remotes/origin/main
   updateProductButtonsStyle(addBtnProduct, btnViewCount);
   updateProductImgStyle(productImg);
   updateCartContainer(product);
