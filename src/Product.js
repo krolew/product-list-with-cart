@@ -71,57 +71,19 @@ function updateProductCountText(productCountText, productName) {
 }
 
 export function handleProductIncrementButton(event) {
-  // const btnViewCount = event.parentNode;
-  // const addBtnProduct = btnViewCount.previousElementSibling;
-  // const productName = btnViewCount.dataset.productName;
-  // const imgContainer =
-  //   btnViewCount.previousElementSibling.previousElementSibling;
-  // const productCountText = btnViewCount.children[1];
   let productName = event.parentNode.dataset.productName;
   Storage.increaseProductAmount(productName);
   updateDomElements(productName);
-  // updateProductCountText(productCountText, productName);
-  // updateAmountCartItemsHeader();
-  // updateCartProductItemPrice(productName);
-  // updateCartTotalPrice();
 }
 
 export function handleProductDecremenButton(event) {
-  // const btnViewCount = event.parentNode;
-  // const addBtnProduct = btnViewCount.previousElementSibling;
-  // const productName = btnViewCount.dataset.productName;
-  // const imgContainer =
-  //   btnViewCount.previousElementSibling.previousElementSibling;
-  // const productCountText = btnViewCount.children[1];
-
   let productName = event.parentNode.dataset.productName;
 
   Storage.decreaseProductAmount(productName);
   updateDomElements(productName);
-
-  // // After decrease Product Amount first we check if there are any elements in the cart
-  // if (Storage.isCartEmpty()) {
-  //   renderEmptyCartContainer();
-  //   updateProductImgStyle(imgContainer);
-  //   updatePorductButtonsStyleDefault(addBtnProduct, btnViewCount);
-
-  //   // After decrease Product Amount we check if our item is deleted
-  // } else if (Storage.getProduct(productName) === undefined) {
-  //   updateProductImgStyle(imgContainer);
-  //   updatePorductButtonsStyleDefault(addBtnProduct, btnViewCount);
-  //   removeCartProduct(productName);
-  //   updateCartTotalPrice();
-  //   updateAmountCartItemsHeader();
-  // } else {
-  //   // If product is not deleted, amount decrease, and prices changed;
-  //   updateProductCountText(productCountText, productName);
-  //   updateAmountCartItemsHeader();
-  //   updateCartProductItemPrice(productName);
-  //   updateCartTotalPrice();
-  // }
 }
 
-function updateDomElements(productName) {
+export function updateDomElements(productName) {
   let viewCountBtn = document.querySelector(
     `.view-count[data-product-name="${productName}"]`
   );
@@ -149,7 +111,7 @@ function updateDomElements(productName) {
   else if (Storage.getProduct(productName) === undefined) {
     removeCartProduct(productName);
     updateProductImgStyle(productImg);
-    updatePorductButtonsStyleDefault(addBtnProduct, btnViewCount);
+    updatePorductButtonsStyleDefault(addBtnProduct, viewCountBtn);
   } else {
     // If product is not deleted, amount decrease, and prices changed;
     updateProductCountText(viewCountBtnText, productName);
@@ -166,6 +128,7 @@ function renderProduct(product) {
     <div class="product-item">
         <div class="product-container-img" data-product-name="${product.name}">
             <img class="product-img" 
+              data-product-name="${product.name}"
               srcset="${product.image.mobile} 654w,
                       ${product.image.tablet} 427w,
                       ${product.image.desktop} 502w"

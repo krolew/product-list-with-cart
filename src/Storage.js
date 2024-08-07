@@ -38,9 +38,9 @@ class Storage {
     this.saveCartList(cartList);
   }
 
-  deleteProduct(product) {
+  deleteProduct(productName) {
     let cartList = this.getCartList();
-    cartList.removeProduct(product);
+    cartList.removeProduct(productName);
     this.saveCartList(cartList);
   }
 
