@@ -1,9 +1,9 @@
-function getCurrentResolutionName() {
-  if (screen.width >= 768) {
-    return "desktop";
-  } else if (screen.width >= 375) {
-    return "tablet";
-  } else {
-    return "mobile";
-  }
+import productData from "./data.json";
+
+export function getProductImgThumbnail(productName) {
+  // console.log(productData.filter((product) => product.name === productName));
+  const product = productData.filter((product) => {
+    return product.name === productName;
+  })[0];
+  return product.image.thumbnail;
 }
