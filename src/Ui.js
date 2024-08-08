@@ -5,9 +5,6 @@ import {
   handleProductDecremenButton,
 } from "./Product";
 
-const productContainer = document.querySelector(".products-container");
-const addBtn = document.querySelector(".add-button");
-
 export default function loadPage() {
   document.addEventListener("DOMContentLoaded", initalizeApp);
 }
