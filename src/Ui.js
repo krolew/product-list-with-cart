@@ -9,6 +9,10 @@ export default function loadPage() {
   document.addEventListener("DOMContentLoaded", initalizeApp);
 }
 
+export function reloadPage() {
+  location.reload();
+}
+
 function initalizeApp() {
   try {
     renderEmptyCartContainer();
@@ -34,8 +38,4 @@ function initAddBtn() {
       }
     }
   });
-}
-
-export function reloadPage() {
-  location.reload();
 }
