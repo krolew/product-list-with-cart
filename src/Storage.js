@@ -49,6 +49,11 @@ class Storage {
     return cartList.getProduct(productName);
   }
 
+  getProducts() {
+    let cartList = this.getCartList();
+    return cartList.getCartList();
+  }
+
   getProductTotalPrice(productName) {
     let cartList = this.getCartList();
     return cartList.getProduct(productName).totalPrice;
@@ -56,7 +61,11 @@ class Storage {
 
   getProductAmount(productName) {
     let cartList = this.getCartList();
-    return cartList.getProduct(productName).amount;
+    let product = cartList.getProduct(productName);
+
+    // there is 1 because if somebody delete product it should update view count btn to 1 and then again if somebody add
+    // this 1 is shown
+    return product ? product.amount : 1;
   }
 
   getTotalPriceCart() {
