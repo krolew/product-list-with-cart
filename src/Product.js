@@ -58,7 +58,6 @@ function updatePorductButtonsStyleDefault(addBtnProduct, btnViewCount) {
 }
 
 export function updateProductImgStyle(imgProduct) {
-  console.log(imgProduct);
   if (imgProduct.classList.contains("active-product-img")) {
     imgProduct.classList.remove("active-product-img");
   } else {
@@ -100,6 +99,8 @@ export function updateDomElements(productName) {
     `.product-counter[data-product-name="${productName}"]`
   );
 
+  updateProductCountText(viewCountBtnText, productName);
+
   // After decrease Product Amount or if we delte product, first we check if there are any elements in the cart
   if (Storage.isCartEmpty()) {
     renderEmptyCartContainer();
@@ -114,11 +115,12 @@ export function updateDomElements(productName) {
     updatePorductButtonsStyleDefault(addBtnProduct, viewCountBtn);
   } else {
     // If product is not deleted, amount decrease, and prices changed;
-    updateProductCountText(viewCountBtnText, productName);
+    // updateProductCountText(viewCountBtnText, productName);
     updateCartProductItemPrice(productName);
   }
 
   // Do it anyway
+  // updateProductCountText(viewCountBtnText, productName);
   updateAmountCartItemsHeader();
   updateCartTotalPrice();
 }
