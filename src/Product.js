@@ -45,16 +45,21 @@ function renderProducts(prodcuts) {
   });
 }
 
-export function updateProductButtonsStyle(addBtnProduct, btnViewCount) {
-  addBtnProduct.style.display = "none";
-  btnViewCount.style.display = "flex";
-}
-
 function updatePorductButtonsStyleDefault(addBtnProduct, btnViewCount) {
   if (btnViewCount.style.display === "flex") {
     btnViewCount.style.display = "none";
     addBtnProduct.style.display = "block";
   }
+}
+
+function updateProductCountText(productCountText, productName) {
+  console.log(productCountText);
+  productCountText.innerHTML = Storage.getProductAmount(productName);
+}
+
+export function updateProductButtonsStyle(addBtnProduct, btnViewCount) {
+  addBtnProduct.style.display = "none";
+  btnViewCount.style.display = "flex";
 }
 
 export function updateProductImgStyle(imgProduct) {
@@ -63,11 +68,6 @@ export function updateProductImgStyle(imgProduct) {
   } else {
     imgProduct.classList.add("active-product-img");
   }
-}
-
-function updateProductCountText(productCountText, productName) {
-  console.log(productCountText);
-  productCountText.innerHTML = Storage.getProductAmount(productName);
 }
 
 export function handleProductIncrementButton(event) {

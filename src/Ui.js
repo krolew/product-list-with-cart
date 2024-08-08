@@ -1,10 +1,9 @@
+import { addProductToCart, renderEmptyCartContainer } from "./Cart";
 import {
   getProducts,
   handleProductIncrementButton,
   handleProductDecremenButton,
 } from "./Product";
-import { addProductToCart } from "./Cart";
-import { renderEmptyCartContainer } from "./Cart";
 
 const productContainer = document.querySelector(".products-container");
 const addBtn = document.querySelector(".add-button");
@@ -17,14 +16,10 @@ function initalizeApp() {
   try {
     renderEmptyCartContainer();
     getProducts();
-    initBtns();
+    initAddBtn();
   } catch (err) {
     console.log(err);
   }
-}
-
-function initBtns() {
-  initAddBtn();
 }
 
 function initAddBtn() {

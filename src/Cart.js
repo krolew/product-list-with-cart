@@ -2,15 +2,15 @@ import iconCartEmpty from "./assets/images/illustration-empty-cart.svg";
 import iconRemoveOrder from "./assets/images/icon-remove-item.svg";
 import iconCarbonNeutral from "./assets/images/icon-carbon-neutral.svg";
 import iconOrderConfirmed from "./assets/images/icon-order-confirmed.svg";
+import Storage from "./Storage";
+import { getProductImgThumbnail } from "./Utils";
+import { reloadPage } from "./Ui";
 import {
   Product,
   updateProductButtonsStyle,
   updateProductImgStyle,
   updateDomElements,
 } from "./Product";
-import { getProductImgThumbnail } from "./Utils";
-import Storage from "./Storage";
-import { reloadPage } from "./Ui";
 
 export class Cart {
   list = [];
@@ -174,14 +174,6 @@ export function handleDeleteProductBtn() {
   });
 }
 
-function processStorageProdcuts() {
-  const products = Storage.getProducts();
-
-  products.forEach((product) => {
-    renderOrderProductsModal(product);
-  });
-}
-
 export function handleConfirmBtn() {
   const confirmBtn = document.querySelector("#confirmOrder");
   confirmBtn.addEventListener("click", (e) => {
@@ -193,6 +185,14 @@ export function handleConfirmBtn() {
       top: 0,
       behavior: "smooth",
     });
+  });
+}
+
+function processStorageProdcuts() {
+  const products = Storage.getProducts();
+
+  products.forEach((product) => {
+    renderOrderProductsModal(product);
   });
 }
 
@@ -321,9 +321,6 @@ function renderOrderProductsModal(product) {
   const orderProductsContainer = document.querySelector(
     ".order-products-container"
   );
-
-  // console.log(product);
-  console.log(getProductImgThumbnail(product.name));
 
   const orderProductTemplate = `
   <div class="order-product">
