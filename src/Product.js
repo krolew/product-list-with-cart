@@ -66,18 +66,18 @@ export function updateProductImgStyle(imgProduct) {
 }
 
 function updateProductCountText(productCountText, productName) {
+  console.log(productCountText);
   productCountText.innerHTML = Storage.getProductAmount(productName);
 }
 
 export function handleProductIncrementButton(event) {
-  let productName = event.parentNode.dataset.productName;
+  let productName = event.dataset.productName;
   Storage.increaseProductAmount(productName);
   updateDomElements(productName);
 }
 
 export function handleProductDecremenButton(event) {
-  let productName = event.parentNode.dataset.productName;
-
+  let productName = event.dataset.productName;
   Storage.decreaseProductAmount(productName);
   updateDomElements(productName);
 }
@@ -140,18 +140,25 @@ function renderProduct(product) {
             <button id="add-btn" class="add-button" data-action="add-product" data-product-name="${
               product.name
             }" data-product-price="${product.price}">
-                    <img src="${addToCartIcon}" alt="addImg">
-                    Add to Cart
+                    <img class="add-to-cart-img" src="${addToCartIcon}" alt="addImg">
+                    <label>Add to Cart</label>
                 </button>
                 
-                <button class="view-count" data-product-name="${
-                  product.name
-                }" data-product-price="${parseFloat(product.price).toFixed(2)}">
-                    <img src="${decrementIcon}" data-action="decrement-product" alt="decrement(-)" data-increment="">
+                <button class="view-count" 
+                  data-product-name="${product.name}" 
+                  data-product-price="${parseFloat(product.price).toFixed(2)}"
+                >
+                    <div class="circle-container">
+                      <img id="decrementBtn" class="decrement-btn" src="${decrementIcon}" data-action="decrement-product" 
+                      data-product-name="${product.name}" alt="decrement(-)" >
+                    </div>
                     <p class="product-counter" data-product-name="${
                       product.name
                     }">1</p>
-                    <img src="${incrementIcon}" data-action="increment-product" alt="increment(+)">
+                    <div class="circle-container">
+                      <img id="incrementBtn" class="increment-btn" src="${incrementIcon}" data-action="increment-product" 
+                      data-product-name="${product.name}" alt="increment(+)">
+                    </div>
                 </button>
             </div>
             <div class="product-description">
