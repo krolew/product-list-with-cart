@@ -1,13 +1,16 @@
 import iconCartEmpty from "./assets/images/illustration-empty-cart.svg";
 import iconRemoveOrder from "./assets/images/icon-remove-item.svg";
 import iconCarbonNeutral from "./assets/images/icon-carbon-neutral.svg";
+import iconOrderConfirmed from "./assets/images/icon-order-confirmed.svg";
 import {
   Product,
   updateProductButtonsStyle,
   updateProductImgStyle,
   updateDomElements,
 } from "./Product";
+import { getProductImgThumbnail } from "./Utils";
 import Storage from "./Storage";
+import { reloadPage } from "./Ui";
 
 export class Cart {
   list = [];
@@ -98,6 +101,7 @@ export function addProductToCart(event) {
     removeEmptyCart();
     renderCartSummary();
     handleDeleteProductBtn();
+    handleConfirmBtn();
   }
 
   Storage.addProduct(product);
@@ -167,6 +171,36 @@ export function handleDeleteProductBtn() {
       Storage.deleteProduct(productName);
       updateDomElements(productName);
     }
+  });
+}
+
+function processStorageProdcuts() {
+  const products = Storage.getProducts();
+
+  products.forEach((product) => {
+    renderOrderProductsModal(product);
+  });
+}
+
+export function handleConfirmBtn() {
+  const confirmBtn = document.querySelector("#confirmOrder");
+  confirmBtn.addEventListener("click", (e) => {
+    renderOrderConfirmModal();
+    processStorageProdcuts();
+    renderOrderProductSumarry();
+    handleBtnOrderNewProject();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+}
+
+function handleBtnOrderNewProject() {
+  const btn = document.querySelector(".btn-start-new-order");
+
+  btn.addEventListener("click", () => {
+    reloadPage();
   });
 }
 
@@ -243,7 +277,7 @@ function renderCartSummary() {
         <img class="cart-carbon-img" src="${iconCarbonNeutral}">
         <p>This is a <label class="carbon-neutral">carbon-neutral</label> delivery</p>    
       </div>
-      <button class="btn-confirm-order">Confirm Order</button>
+      <button id="confirmOrder" class="btn-confirm-order">Confirm Order</button>
     </div>
   `;
 
@@ -253,4 +287,78 @@ function renderCartSummary() {
 
   // Append empty Cart Template
   cartContainer.appendChild(cartProductElement);
+}
+
+function renderOrderConfirmModal() {
+  const orderConfirmModalTemplate = `
+  <div class="order-modal-container">
+    <div class="order-modal">
+      <div class="order-confirmed-img-container">
+        <img class="order-confrimed-img" src="${iconOrderConfirmed}">
+      </div>
+      <div class="order-confirmed-header">
+        <h2>Order Confirmed</h2>
+        <p>We hope you enjoy your food!</p>    
+      </div>
+      <div class="order-products-container">
+
+      </div>
+      <div class="order-total-price">
+
+      </div>
+      <button class="btn-start-new-order">Start New Order</button>
+    </div>
+  </div>
+`;
+  const orderModalElement = document
+    .createRange()
+    .createContextualFragment(orderConfirmModalTemplate);
+
+  document.body.appendChild(orderModalElement);
+}
+
+function renderOrderProductsModal(product) {
+  const orderProductsContainer = document.querySelector(
+    ".order-products-container"
+  );
+
+  // console.log(product);
+  console.log(getProductImgThumbnail(product.name));
+
+  const orderProductTemplate = `
+  <div class="order-product">
+    <img src="${getProductImgThumbnail(product.name)}" alt="product img"> 
+    <div class="order-description">
+      <h4>${product.name}</h4>
+      <div class="order-info">
+        <p>${product.amount}x</p>
+        <p>@ ${parseFloat(product.price).toFixed(2)}</p>
+      </div>
+    </div>
+    <p class="order-product-total">\$${product.totalPrice}</p>
+  </div>
+`;
+
+  const orderProductElement = document
+    .createRange()
+    .createContextualFragment(orderProductTemplate);
+
+  orderProductsContainer.appendChild(orderProductElement);
+}
+
+function renderOrderProductSumarry() {
+  const orderProductsContainer = document.querySelector(
+    ".order-products-container"
+  );
+
+  const orderProductSumarryTemplate = `<div class="order-product-summary">
+  <p>Order Total</p>
+  <h2>\$${Storage.getTotalPriceCart().toFixed(2)}</h2>
+  </div>`;
+
+  const orderProductElement = document
+    .createRange()
+    .createContextualFragment(orderProductSumarryTemplate);
+
+  orderProductsContainer.appendChild(orderProductElement);
 }
