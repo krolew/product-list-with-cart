@@ -3,7 +3,7 @@ import {
   handleProductIncrementButton,
   handleProductDecremenButton,
 } from "./Product";
-import { addProductToCart, initDeleteProductBtn } from "./Cart";
+import { addProductToCart } from "./Cart";
 import { renderEmptyCartContainer } from "./Cart";
 
 const productContainer = document.querySelector(".products-container");
@@ -42,4 +42,8 @@ function initAddBtn() {
       }
     }
   });
+}
+
+export function reloadPage() {
+  location.reload();
 }
